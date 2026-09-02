@@ -10,18 +10,6 @@ router = APIRouter(prefix="/support", tags=["support"])
 @router.get("/tickets")
 def list_tickets(db: Session = Depends(get_db)):
     tickets = db.query(SupportTicket).order_by(SupportTicket.created_at.desc()).all()
-    if not tickets:
-        # Seed initial real system support tickets if empty
-        initial = [
-            SupportTicket(id="TK-1001", subject="Payment settlement delay inquiry", from_user="Layla Catering LLC", user_type="caterer", priority="high", assignee="Layla Admin", status="open"),
-            SupportTicket(id="TK-1002", subject="Unable to update menu prices", from_user="Zayed Al Hashmi", user_type="caterer", priority="medium", assignee="Support Team", status="in_progress"),
-            SupportTicket(id="TK-1003", subject="Booking cancellation refund status", from_user="Omar Farooq", user_type="customer", priority="urgent", assignee="Finance Officer", status="open"),
-            SupportTicket(id="TK-1004", subject="Profile Trade License verification help", from_user="Neo Catering", user_type="caterer", priority="low", assignee="Operations Lead", status="resolved"),
-        ]
-        db.add_all(initial)
-        db.commit()
-        tickets = db.query(SupportTicket).order_by(SupportTicket.created_at.desc()).all()
-
     return [
         {
             "id": t.id,

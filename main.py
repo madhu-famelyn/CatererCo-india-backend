@@ -12,6 +12,10 @@ from routers import (
     users_router, gallery_router, upload_router, support_router, reviews_router,
 )
 
+# ── Auto-create all DB tables on startup (safe: create_all skips existing tables)
+import models.support  # noqa: F401 — ensure SupportTicket is registered with Base
+Base.metadata.create_all(bind=engine)
+
 app = FastAPI(
     title="CatererCo UAE API",
     description="Backend for the UAE Catering Marketplace",

@@ -20,7 +20,7 @@ class CatererRegisterInput(BaseModel):
     contact_person: Optional[str] = None
     email: Optional[str] = None
     phone: Optional[str] = None
-    emirate: Optional[str] = "Dubai"
+    emirate: Optional[str] = "Hyderabad"
     address: Optional[str] = None
     password: Optional[str] = None
     documents: Optional[List[str]] = None
@@ -31,6 +31,9 @@ class CatererRegisterInput(BaseModel):
     iso_14001_certified: Optional[bool] = False
     iso_14001_certificate: Optional[str] = None
     certifications: Optional[List[str]] = None
+    google_rating: Optional[float] = None
+    years_in_business: Optional[int] = None
+    orders_delivered: Optional[int] = None
     auto_approve: Optional[bool] = False
 
 
@@ -182,7 +185,10 @@ def register_caterer(data: CatererRegisterInput, db: Session = Depends(get_db)):
         iso_14001_certificate=data.iso_14001_certificate,
         is_verified=bool(data.auto_approve),
         owner_id=user.id,
-        rating=0.0,
+        google_rating=float(data.google_rating) if data.google_rating is not None else None,
+        rating=float(data.google_rating) if data.google_rating is not None else 0.0,
+        years_in_business=int(data.years_in_business) if data.years_in_business is not None else None,
+        orders_delivered=int(data.orders_delivered) if data.orders_delivered is not None else None,
         reviews=0,
         starting_from=45.0,
     )
